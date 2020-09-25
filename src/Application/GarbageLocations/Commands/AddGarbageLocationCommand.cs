@@ -1,6 +1,5 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,11 +8,11 @@ namespace Application.GarbageLocations.Commands
 {
     public class AddGarbageLocationCommand : IRequest<Unit>
     {
-        private VehicleSize VehicleSize { get; }
+        private string VehicleSizeName { get; }
 
-        public AddGarbageLocationCommand(VehicleSize vehicleSize)
+        public AddGarbageLocationCommand(string vehicleSizeName)
         {
-            VehicleSize = vehicleSize;
+            VehicleSizeName = vehicleSizeName;
         }
 
         internal sealed class Handler : IRequestHandler<AddGarbageLocationCommand, Unit>
@@ -27,7 +26,7 @@ namespace Application.GarbageLocations.Commands
 
             public async Task<Unit> Handle(AddGarbageLocationCommand request, CancellationToken cancellationToken = default)
             {
-                _dbContext.GarbageLocations.Add(new GarbageLocation(request.VehicleSize));
+                _dbContext.GarbageLocations.Add(new GarbageLocation(request.VehicleSizeName));
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
                 return Unit.Value;

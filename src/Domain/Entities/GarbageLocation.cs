@@ -1,16 +1,14 @@
-﻿using Domain.Enums;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class GarbageLocation : BaseEntity
     {
         private GarbageLocation() { }
 
-        public GarbageLocation(VehicleSize vehicleSize)
+        public GarbageLocation(string vehicleSizeName)
         {
-            VehicleSize = vehicleSize;
+            VehicleSizeName = vehicleSizeName;
         }
 
-        public VehicleSize VehicleSize { get; private set; }
+        public string VehicleSizeName { get; set; }
     }
 }
