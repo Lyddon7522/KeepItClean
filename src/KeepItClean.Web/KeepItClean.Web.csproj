@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Samsons.BlazorMaps.MapBox\Samsons.BlazorMaps.MapBox.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>
