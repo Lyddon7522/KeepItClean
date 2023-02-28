@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KeepItClean.Shared\KeepItClean.Shared.csproj" />
     <ProjectReference Include="..\Samsons.BlazorMaps.MapBox\Samsons.BlazorMaps.MapBox.csproj" />
   </ItemGroup>
 
