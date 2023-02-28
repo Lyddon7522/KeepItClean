@@ -1,4 +1,4 @@
-using KeepItClean.Web;
+using KeepItClean.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
