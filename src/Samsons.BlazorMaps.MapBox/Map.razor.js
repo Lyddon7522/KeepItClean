@@ -12,6 +12,8 @@
             positionOptions: {
                 enableHighAccuracy: true
             },
+            trackUserLocation: true,
+            showUserHeading: true
         })
     );
 }
