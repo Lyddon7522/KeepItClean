@@ -13,7 +13,7 @@ public partial class Map
     {
         if (firstRender)
         {
-            _mapModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Samsons.BlazorMaps.Mapbox/Map.razor.js");
+            _mapModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Samsons.BlazorMaps.MapBox/Map.razor.js");
         }
 
         await _mapModule.InvokeVoidAsync("createMapBoxMap");
