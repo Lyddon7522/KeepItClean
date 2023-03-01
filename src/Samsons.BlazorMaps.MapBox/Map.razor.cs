@@ -16,6 +16,6 @@ public partial class Map
             _mapModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Samsons.BlazorMaps.MapBox/Map.razor.js");
         }
 
-        await _mapModule.InvokeVoidAsync("createMapBoxMap");
+        await _mapModule.InvokeVoidAsync("getGeolocation");
     }
 }

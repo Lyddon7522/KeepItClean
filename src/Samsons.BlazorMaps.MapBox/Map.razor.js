@@ -1,10 +1,13 @@
-﻿export function createMapBoxMap() {
+﻿export function createMapBoxMap(position) {
+    
+    console.log(position);
+    
     const map = new mapboxgl.Map({
         container: 'map', // container ID
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
         style: 'mapbox://styles/mapbox/satellite-streets-v12', // style URL
-        center: [-93.6250, 41.5868], // starting position [lng, lat]
-        zoom: 9 // starting zoom
+        center: [position.coords.longitude, position.coords.latitude], // starting position [lng, lat]
+        zoom: 15 // starting zoom
     });
 
     map.addControl(
@@ -16,4 +19,22 @@
             showUserHeading: true
         })
     );
+}
+
+export function getGeolocation() {
+  
+    function success(position) {
+        createMapBoxMap(position);
+    }
+
+    function error() {
+        alert("Unable to retrieve your location");
+        return null;
+    }
+
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+    } else {
+        navigator.geolocation.getCurrentPosition(success, error);
+    }
 }
