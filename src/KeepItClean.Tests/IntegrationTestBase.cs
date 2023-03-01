@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Amazon.DynamoDBv2;
+using KeepItClean.Server.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KeepItClean.Tests;
@@ -19,8 +21,7 @@ public class IntegrationTesting
     [OneTimeSetUp]
     public async Task InitializeAsync()
     {
-        // TODO database.
-        //_connectionString = await MsSqlContainerFactory.CreateAsync();
+        _connectionString = await DynamoDbContainerFactory.CreateAsync();
 
         _application = CreateApplication();
 
@@ -29,6 +30,12 @@ public class IntegrationTesting
 
     public static async Task ResetStateAsync()
     {
+        var client = _scope.ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
+
+        await client.DeleteTableAsync("Locations");
+
+        var initializeDatabaseService = _scope.ServiceProvider.GetRequiredService<InitializeDatabaseService>();
+        await initializeDatabaseService.InitializeAsync();
     }
 
     internal static WebApplicationFactory<Program> GetUnauthenticatedApplication()
