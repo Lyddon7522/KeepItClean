@@ -19,4 +19,9 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_JsFileModuleStaticWebAsset Include="Components\Controls\GeolocateControl.razor.js" />
+    <_JsFileModuleStaticWebAsset Include="Components\Map\Map.razor.js" />
+  </ItemGroup>
+
 </Project>
