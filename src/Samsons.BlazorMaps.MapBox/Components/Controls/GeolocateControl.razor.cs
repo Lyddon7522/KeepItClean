@@ -14,9 +14,11 @@ public partial class GeolocateControl
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
-            _geolocatControl = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Samsons.BlazorMaps.MapBox/Components/Controls/GeolocateControl.razor.js");
-        
+        if (firstRender)
+        {
+            _geolocatControl = await JSRuntime.InvokeAsync<IJSObjectReference>("import",
+                "./_content/Samsons.BlazorMaps.MapBox/Components/Controls/GeolocateControl.razor.js");
+        }
 
         await _geolocatControl.InvokeVoidAsync("addGeolocateControl");
     }

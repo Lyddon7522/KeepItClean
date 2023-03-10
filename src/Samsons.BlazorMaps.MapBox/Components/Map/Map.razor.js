@@ -1,5 +1,4 @@
 export async function createMapBoxMap(mapOptions) {
-    console.log(mapOptions.center.toString())
     const map = new mapboxgl.Map({
         container: mapOptions.container, // container ID
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
@@ -7,16 +6,6 @@ export async function createMapBoxMap(mapOptions) {
         center: [mapOptions.center.longitude, mapOptions.center.latitude], // starting position [lng, lat]
         zoom: mapOptions.zoom // starting zoom
     });
-
-    /*map.addControl(
-        new mapboxgl.GeolocateControl({
-            positionOptions: {
-                enableHighAccuracy: true
-            },
-            trackUserLocation: true,
-            showUserHeading: true
-        })
-    );*/
     
     /*const options = {
         maximumAge: 10000,
@@ -38,6 +27,18 @@ export async function createMapBoxMap(mapOptions) {
     } catch (err) {
         console.log(err.message);
     }*/
+}
+
+export function addGeolocateControl() {
+    this.map.addControl(
+        new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true,
+            showUserHeading: true
+        })
+    );
 }
 
 export function getPosition(options){
