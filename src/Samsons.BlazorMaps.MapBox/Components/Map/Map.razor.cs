@@ -16,15 +16,16 @@ public partial class Map
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        MapOptions ??= new MapOptions();
-
-        MapOptions.Container = _id;
-
-        await JSRuntime.InvokeVoidAsync("createMapBoxMap", MapOptions);
-
         if (firstRender)
         {
+            MapOptions ??= new MapOptions();
+
+            MapOptions.Container = _id;
+
+            await JSRuntime.InvokeVoidAsync("createMapBoxMap", MapOptions);
+
             _isLoaded = true;
+
             StateHasChanged();
         }
     }
