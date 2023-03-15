@@ -1,5 +1,6 @@
 ﻿<div id="@_id" style='width: 400px; height: 300px;'>
-    <div>
+    @if (_isLoaded)
+    {
         @ChildContent
-    </div>
+    }
 </div>

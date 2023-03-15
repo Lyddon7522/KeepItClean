@@ -1,5 +1,5 @@
-export async function createMapBoxMap(mapOptions) {
-    const map = new mapboxgl.Map({
+function createMapBoxMap(mapOptions) {
+    window.map = new mapboxgl.Map({
         container: mapOptions.container, // container ID
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
         style: mapOptions.style, // style URL
@@ -29,8 +29,8 @@ export async function createMapBoxMap(mapOptions) {
     }*/
 }
 
-export function addGeolocateControl() {
-    this.map.addControl(
+function addGeolocateControl() {
+    window.map.addControl(
         new mapboxgl.GeolocateControl({
             positionOptions: {
                 enableHighAccuracy: true
@@ -41,7 +41,7 @@ export function addGeolocateControl() {
     );
 }
 
-export function getPosition(options){
+function getPosition(options){
     return new Promise((resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject, options)
     );
