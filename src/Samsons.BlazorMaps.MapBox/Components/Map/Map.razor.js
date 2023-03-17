@@ -1,4 +1,4 @@
-function createMapBoxMap(mapOptions) {
+async function createMapBoxMap(mapOptions) {
     window.map = new mapboxgl.Map({
         container: mapOptions.container, // container ID
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
@@ -6,12 +6,12 @@ function createMapBoxMap(mapOptions) {
         center: [mapOptions.center.longitude, mapOptions.center.latitude], // starting position [lng, lat]
         zoom: mapOptions.zoom // starting zoom
     });
-    
+
     /*const options = {
         maximumAge: 10000,
         timeout: 5000,
     }
-    
+
     try {
         const position = await getPosition(options);
         map.flyTo({
@@ -27,6 +27,24 @@ function createMapBoxMap(mapOptions) {
     } catch (err) {
         console.log(err.message);
     }*/
+}
+
+function flyTo(flyToOptions) {
+    
+    window.map.flyTo({
+        center: [flyToOptions.center.longitude, flyToOptions.center.latitude],
+        zoom: flyToOptions.zoom,
+        speed: flyToOptions.speed,
+        curve: flyToOptions.curve,
+    });
+} 
+
+// This should be in a Markers and Controls class, but here for now
+function addMarker(position, options) {
+    const marker = new mapboxgl.Marker({
+        draggable: true
+    }).setLngLat([position.coords.longitude, position.coords.latitude])
+        .addTo(window.map);
 }
 
 function addGeolocateControl() {
