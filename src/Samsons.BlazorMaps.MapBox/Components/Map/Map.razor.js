@@ -6,27 +6,6 @@ async function createMapBoxMap(mapOptions) {
         center: [mapOptions.center.longitude, mapOptions.center.latitude], // starting position [lng, lat]
         zoom: mapOptions.zoom // starting zoom
     });
-
-    /*const options = {
-        maximumAge: 10000,
-        timeout: 5000,
-    }
-
-    try {
-        const position = await getPosition(options);
-        map.flyTo({
-            center: [position.coords.longitude, position.coords.latitude],
-            zoom: 12,
-            speed: 0.5,
-            curve: 1,
-        });
-        const marker = new mapboxgl.Marker({
-            draggable: true
-        }).setLngLat([position.coords.longitude, position.coords.latitude])
-            .addTo(map);
-    } catch (err) {
-        console.log(err.message);
-    }*/
 }
 
 function flyTo(flyToOptions) {
