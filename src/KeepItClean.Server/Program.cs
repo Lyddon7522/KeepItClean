@@ -1,7 +1,5 @@
-using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.Runtime;
 using KeepItClean.Server.Domain;
 using KeepItClean.Server.Infrastructure;
 using KeepItClean.Shared.Features;
@@ -9,20 +7,26 @@ using KeepItClean.Shared.Features;
 var builder = WebApplication.CreateBuilder(args);
 
 // TODO: Add swagger.
-if (builder.Environment.IsEnvironment("Local"))
+if (builder.Environment.IsDevelopment())
 {
     // TODO: AWS, Firebase secrets.
     builder.Configuration.AddUserSecrets<Program>();
 }
 
-// TODO: revist this config
-var credentials = new BasicAWSCredentials("<ACCESS_KEY>", "<SECRET_KEY>");
-var config = new AmazonDynamoDBConfig()
+if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Test"))
 {
-    RegionEndpoint = RegionEndpoint.USEast1
-};
-var client = new AmazonDynamoDBClient(credentials, config);
-builder.Services.AddSingleton<IAmazonDynamoDB>(client);
+    var connectionString = await DynamoDbContainerFactory.CreateAsync();
+
+    builder.Configuration.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+    {
+        new KeyValuePair<string, string?>("DynamoDb:LocalServiceUrl", connectionString)
+    });
+}
+else
+{
+}
+
+builder.Services.AddSingleton<IAmazonDynamoDB>(new AmazonDynamoDBClient(new AmazonDynamoDBConfig { ServiceURL = builder.Configuration.GetValue<string>("DynamoDb:LocalServiceUrl") }));
 builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
 builder.Services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
 

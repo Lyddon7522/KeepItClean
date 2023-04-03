@@ -13,7 +13,7 @@ public class DynamoDbContainerFactory : IAsyncDisposable
     {
         _dynamoDbContainer = new ContainerBuilder()
             .WithImage("amazon/dynamodb-local:latest")
-            .WithPortBinding(80, true)
+            .WithPortBinding(8000, true)
             .Build();
 
         await _dynamoDbContainer.StartAsync();

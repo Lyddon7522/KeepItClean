@@ -1,5 +1,4 @@
 ﻿using Amazon.DynamoDBv2;
-using KeepItClean.Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,13 +15,10 @@ public class IntegrationTesting
 {
     private static WebApplicationFactory<Program> _application = null!;
     private static IServiceScope _scope = null!;
-    private static string _connectionString = null!;
 
     [OneTimeSetUp]
     public async Task InitializeAsync()
     {
-        _connectionString = await DynamoDbContainerFactory.CreateAsync();
-
         _application = CreateApplication();
 
         _scope = _application.Services.CreateAsyncScope();
@@ -33,9 +29,6 @@ public class IntegrationTesting
         var client = _scope.ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
 
         await client.DeleteTableAsync("Locations");
-
-        var initializeDatabaseService = _scope.ServiceProvider.GetRequiredService<InitializeDatabaseService>();
-        await initializeDatabaseService.InitializeAsync();
     }
 
     internal static WebApplicationFactory<Program> GetUnauthenticatedApplication()
