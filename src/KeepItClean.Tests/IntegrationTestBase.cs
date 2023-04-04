@@ -1,4 +1,6 @@
-﻿using KeepItClean.Server.Infrastructure;
+﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using KeepItClean.Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,8 +28,14 @@ public class IntegrationTesting
 
     public static async Task ResetStateAsync()
     {
-        var databaseInitializer = _scope.ServiceProvider.GetRequiredService<InitializeDatabaseService>();
+        try
+        {
+            var dynamoDbClient = _scope.ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
+            await dynamoDbClient.DeleteTableAsync("Locations");
+        }
+        catch (ResourceNotFoundException) { }
 
+        var databaseInitializer = _scope.ServiceProvider.GetRequiredService<InitializeDatabaseService>();
         await databaseInitializer.InitializeAsync(CancellationToken.None);
     }
 
