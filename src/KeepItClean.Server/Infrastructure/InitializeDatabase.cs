@@ -1,12 +1,13 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using System.Net;
 
 namespace KeepItClean.Server.Infrastructure;
 
 public class InitializeDatabaseService
 {
     private readonly IAmazonDynamoDB _amazonDynamoDb;
+    private const string _tableName = "Locations";
+
     public InitializeDatabaseService(IAmazonDynamoDB amazonDynamoDb)
     {
         _amazonDynamoDb = amazonDynamoDb;
@@ -14,11 +15,12 @@ public class InitializeDatabaseService
 
     public async Task InitializeAsync(CancellationToken cancellationToken)
     {
-        string tableName = "Locations";
+        if (await LocationTableAlreadyExistsAsync(cancellationToken)) return;
 
+        // TODO: modify this to create a real Locations table.
         var request = new CreateTableRequest
         {
-            TableName = tableName,
+            TableName = _tableName,
             AttributeDefinitions = new List<AttributeDefinition>()
             {
                 new AttributeDefinition
@@ -27,12 +29,12 @@ public class InitializeDatabaseService
                   AttributeType = "N"
                 }
             },
-            KeySchema = new List<KeySchemaElement>()
+            KeySchema = new List<KeySchemaElement>
             {
                 new KeySchemaElement
                 {
                     AttributeName = "Id",
-                    KeyType = "HASH"  //Partition key
+                    KeyType = "HASH"  //Partition key - probably should be US state?
                 }
             },
             ProvisionedThroughput = new ProvisionedThroughput
@@ -42,18 +44,19 @@ public class InitializeDatabaseService
             }
         };
 
-        var response = await _amazonDynamoDb.CreateTableAsync(request, cancellationToken);
-
-        // TODO: make sure this matches reality. https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LowLevelDotNetWorkingWithTables.html
-        // TODO: what if its already initialized? 
-        if (response.HttpStatusCode != HttpStatusCode.OK) throw new FailedToInitializeDatabaseException($"Database failed to initialize with status code of {response.HttpStatusCode}.");
+        await _amazonDynamoDb.CreateTableAsync(request, cancellationToken);
     }
-}
 
-internal class FailedToInitializeDatabaseException : Exception
-{
-    public FailedToInitializeDatabaseException(string message) : base(message)
+    private async Task<bool> LocationTableAlreadyExistsAsync(CancellationToken cancellationToken)
     {
+        DescribeTableResponse? existingTable = null;
+        try
+        {
+            existingTable = await _amazonDynamoDb.DescribeTableAsync(_tableName, cancellationToken);
+        }
+        catch (ResourceNotFoundException) { }
+        if (existingTable is not null) return true;
 
+        return false;
     }
 }

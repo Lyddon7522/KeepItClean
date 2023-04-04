@@ -1,5 +1,4 @@
-﻿using Amazon.DynamoDBv2;
-using KeepItClean.Server.Infrastructure;
+﻿using KeepItClean.Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,8 +26,6 @@ public class IntegrationTesting
 
     public static async Task ResetStateAsync()
     {
-        var client = _scope.ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
-
         var databaseInitializer = _scope.ServiceProvider.GetRequiredService<InitializeDatabaseService>();
 
         await databaseInitializer.InitializeAsync(CancellationToken.None);
