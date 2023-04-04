@@ -7,7 +7,7 @@ using KeepItClean.Shared.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Test"))
+if (builder.Environment.IsDevelopment())
 {
     var connectionString = await DynamoDbContainerFactory.CreateAsync();
 
