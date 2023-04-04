@@ -1,17 +1,11 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.Runtime;
 using KeepItClean.Server.Domain;
 using KeepItClean.Server.Infrastructure;
 using KeepItClean.Shared.Features;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// TODO: Add swagger.
-if (builder.Environment.IsDevelopment())
-{
-    // TODO: AWS, Firebase secrets.
-    builder.Configuration.AddUserSecrets<Program>();
-}
 
 if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Test"))
 {
@@ -19,19 +13,28 @@ if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Te
 
     builder.Configuration.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
     {
-        new KeyValuePair<string, string?>("DynamoDb:LocalServiceUrl", connectionString)
+        new("AWS:ServiceUrl", connectionString),
+        new("AWS:AccessKeyId", "TestUser"),
+        new("AWS:SecretAccessKey", "TestSecret")
     });
 }
 else
 {
 }
 
-builder.Services.AddSingleton<IAmazonDynamoDB>(new AmazonDynamoDBClient(new AmazonDynamoDBConfig { ServiceURL = builder.Configuration.GetValue<string>("DynamoDb:LocalServiceUrl") }));
+builder.Services.AddDefaultAWSOptions(provider =>
+{
+    var options = builder.Configuration.GetAWSOptions();
+    options.Credentials = new BasicAWSCredentials(builder.Configuration.GetValue<string>("AWS:AccessKeyId"), builder.Configuration.GetValue<string>("AWS:SecretAccessKey"));
+
+    return options;
+});
+builder.Services.AddAWSService<IAmazonDynamoDB>();
 builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
 builder.Services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddSingleton<InitializeDatabaseService>();
 
-// TODO: Wire up docker (linux)
-// TODO: DynamoDB local (docker) -> https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html
+
 // TODO: DynamoDB health checks.
 
 var app = builder.Build();

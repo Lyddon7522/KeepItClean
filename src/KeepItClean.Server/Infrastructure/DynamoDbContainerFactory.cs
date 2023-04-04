@@ -13,12 +13,12 @@ public class DynamoDbContainerFactory : IAsyncDisposable
     {
         _dynamoDbContainer = new ContainerBuilder()
             .WithImage("amazon/dynamodb-local:latest")
-            .WithPortBinding(8000, true)
+            .WithPortBinding(8000, 8000)
             .Build();
 
         await _dynamoDbContainer.StartAsync();
 
-        return "http://dynamodb-local:8000";
+        return "http://localhost:8000";
     }
 
     public ValueTask DisposeAsync() => _dynamoDbContainer.DisposeAsync();

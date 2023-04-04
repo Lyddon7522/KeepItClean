@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
+using KeepItClean.Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,7 +29,9 @@ public class IntegrationTesting
     {
         var client = _scope.ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
 
-        await client.DeleteTableAsync("Locations");
+        var databaseInitializer = _scope.ServiceProvider.GetRequiredService<InitializeDatabaseService>();
+
+        await databaseInitializer.InitializeAsync(CancellationToken.None);
     }
 
     internal static WebApplicationFactory<Program> GetUnauthenticatedApplication()

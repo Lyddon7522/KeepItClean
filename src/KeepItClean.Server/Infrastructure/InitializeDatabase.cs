@@ -6,13 +6,13 @@ namespace KeepItClean.Server.Infrastructure;
 
 public class InitializeDatabaseService
 {
-    private readonly AmazonDynamoDBClient _client;
-    public InitializeDatabaseService(AmazonDynamoDBClient client)
+    private readonly IAmazonDynamoDB _amazonDynamoDb;
+    public InitializeDatabaseService(IAmazonDynamoDB amazonDynamoDb)
     {
-        _client = client;
+        _amazonDynamoDb = amazonDynamoDb;
     }
 
-    public async Task InitializeAsync()
+    public async Task InitializeAsync(CancellationToken cancellationToken)
     {
         string tableName = "Locations";
 
@@ -42,7 +42,7 @@ public class InitializeDatabaseService
             }
         };
 
-        var response = await _client.CreateTableAsync(request);
+        var response = await _amazonDynamoDb.CreateTableAsync(request, cancellationToken);
 
         // TODO: make sure this matches reality. https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LowLevelDotNetWorkingWithTables.html
         // TODO: what if its already initialized? 
