@@ -1,8 +1,8 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Runtime;
-using KeepItClean.Server.Domain;
 using KeepItClean.Server.Infrastructure;
+using KeepItClean.Server.Infrastructure.Models;
 using KeepItClean.Shared.Features;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,9 +17,6 @@ if (builder.Environment.IsDevelopment())
         new("AWS:AccessKeyId", "TestUser"),
         new("AWS:SecretAccessKey", "TestSecret")
     });
-}
-else
-{
 }
 
 builder.Services.AddDefaultAWSOptions(provider =>
@@ -46,7 +43,7 @@ app.UseHttpsRedirection();
 // TODO: test.
 app.MapPost("/api/locations", async (IRepository<Location> repository, AddLocationRequest request, CancellationToken cancellationToken) =>
 {
-    var location = new Location { Coordinates = request.Coordinates, Name = request.Name };
+    var location = new Location { Longitude = request.Longitude, Latitude = request.Latitude, Name = request.Name };
     await repository.AddAsync(location, cancellationToken);
 });
 

@@ -1,24 +1,20 @@
-﻿using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
+﻿using Testcontainers.DynamoDb;
 
 namespace KeepItClean.Server.Infrastructure;
 
 public class DynamoDbContainerFactory : IAsyncDisposable
 {
-    private static IContainer _dynamoDbContainer = null!;
+    private static DynamoDbContainer _dynamoDbContainer = null!;
 
     private DynamoDbContainerFactory() { }
 
     public static async Task<string> CreateAsync()
     {
-        _dynamoDbContainer = new ContainerBuilder()
-            .WithImage("amazon/dynamodb-local:latest")
-            .WithPortBinding(8000, 8000)
-            .Build();
+        _dynamoDbContainer = new DynamoDbBuilder().Build();
 
         await _dynamoDbContainer.StartAsync();
 
-        return "http://localhost:8000";
+        return _dynamoDbContainer.GetConnectionString();
     }
 
     public ValueTask DisposeAsync() => _dynamoDbContainer.DisposeAsync();

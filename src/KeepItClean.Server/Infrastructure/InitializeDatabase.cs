@@ -1,5 +1,7 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using KeepItClean.Server.Infrastructure.Models;
+using System.Net;
 
 namespace KeepItClean.Server.Infrastructure;
 
@@ -17,7 +19,6 @@ public class InitializeDatabaseService
     {
         if (await LocationTableAlreadyExistsAsync(cancellationToken)) return;
 
-        // TODO: modify this to create a real Locations table.
         var request = new CreateTableRequest
         {
             TableName = _tableName,
@@ -25,15 +26,15 @@ public class InitializeDatabaseService
             {
                 new AttributeDefinition
                 {
-                  AttributeName = "Id",
-                  AttributeType = "N"
+                  AttributeName = nameof(Location.Id),
+                  AttributeType = "S"
                 }
             },
             KeySchema = new List<KeySchemaElement>
             {
                 new KeySchemaElement
                 {
-                    AttributeName = "Id",
+                    AttributeName = nameof(Location.Id),
                     KeyType = "HASH"  //Partition key - probably should be US state?
                 }
             },
@@ -44,7 +45,12 @@ public class InitializeDatabaseService
             }
         };
 
-        await _amazonDynamoDb.CreateTableAsync(request, cancellationToken);
+        var response = await _amazonDynamoDb.CreateTableAsync(request, cancellationToken);
+
+        if (response.HttpStatusCode != HttpStatusCode.OK)
+        {
+            throw new InvalidOperationException($"Creating the dynamo db table was not successful. Table: {response.TableDescription.TableName}");
+        }
     }
 
     private async Task<bool> LocationTableAlreadyExistsAsync(CancellationToken cancellationToken)
