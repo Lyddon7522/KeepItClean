@@ -6,6 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -16,12 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <_JsFileModuleStaticWebAsset Include="Components\Controls\GeolocateControl.razor.js" />
+    <_JsFileModuleStaticWebAsset Include="Components\Map\Map.razor.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <_JsFileModuleStaticWebAsset Include="Components\Controls\GeolocateControl.razor.js" />
-    <_JsFileModuleStaticWebAsset Include="Components\Map\Map.razor.js" />
+    <Folder Include="Components\Layers\" />
   </ItemGroup>
 
 </Project>
