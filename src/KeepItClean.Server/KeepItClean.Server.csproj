@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.102.18" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.5" />
-    <PackageReference Include="Testcontainers" Version="2.4.0" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.103.18" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.7" />
+    <PackageReference Include="Testcontainers.DynamoDb" Version="3.2.0" />
   </ItemGroup>
 
 </Project>

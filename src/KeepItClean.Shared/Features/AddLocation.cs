@@ -1,5 +1,3 @@
-﻿using System.Drawing;
+﻿namespace KeepItClean.Shared.Features;
 
-namespace KeepItClean.Shared.Features;
-
-public record AddLocationRequest(Point Coordinates, string Name);
+public record AddLocationRequest(decimal Longitude, decimal Latitude, string Name);

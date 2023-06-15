@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.Model;
 using KeepItClean.Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -16,26 +17,23 @@ public class IntegrationTestBase
 public class IntegrationTesting
 {
     private static WebApplicationFactory<Program> _application = null!;
-    private static IServiceScope _scope = null!;
 
     [OneTimeSetUp]
     public async Task InitializeAsync()
     {
         _application = CreateApplication();
-
-        _scope = _application.Services.CreateAsyncScope();
     }
 
     public static async Task ResetStateAsync()
     {
         try
         {
-            var dynamoDbClient = _scope.ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
+            var dynamoDbClient = _application.Services.GetRequiredService<IAmazonDynamoDB>();
             await dynamoDbClient.DeleteTableAsync("Locations");
         }
         catch (ResourceNotFoundException) { }
 
-        var databaseInitializer = _scope.ServiceProvider.GetRequiredService<InitializeDatabaseService>();
+        var databaseInitializer = _application.Services.GetRequiredService<InitializeDatabaseService>();
         await databaseInitializer.InitializeAsync(CancellationToken.None);
     }
 
@@ -47,5 +45,14 @@ public class IntegrationTesting
         var application = new WebApplicationFactory<Program>();
 
         return application;
+    }
+
+    internal static async Task<TEntity?> FirstOrDefaultAsync<TEntity>() where TEntity : class
+    {
+        var repository = _application.Services.GetRequiredService<IRepository<TEntity>>();
+
+        var entity = (await repository.GetAllAsync(Array.Empty<ScanCondition>(), CancellationToken.None)).FirstOrDefault();
+
+        return entity;
     }
 }
