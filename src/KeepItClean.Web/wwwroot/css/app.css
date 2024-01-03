@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    src: url('../fonts/earthis.otf');
+    font-family: 'Earthis';
+}
+
+@font-face {
+    src: url('https://fonts.googleapis.com/css2?family=Eczar&display=swap');
+    font-family: 'Eczar';
+}
