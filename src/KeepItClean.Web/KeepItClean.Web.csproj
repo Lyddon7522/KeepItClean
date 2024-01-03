@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KeepItClean.Web.Client\KeepItClean.Web.Client.csproj" />
+    <PackageReference Include="AspNetCore.SassCompiler" Version="1.69.5" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
 	<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.300.28" />
@@ -22,6 +23,14 @@
   <ItemGroup>
     <None Include="wwwroot\js\features\home.js" />
     <None Include="wwwroot\js\map.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Styles\site.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
 </Project>

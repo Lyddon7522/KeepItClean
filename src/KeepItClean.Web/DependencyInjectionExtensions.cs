@@ -17,6 +17,10 @@ public static class DependencyInjectionExtensions
         // TODO: automapper.
         // TODO: test.
 
+#if DEBUG
+        builder.Services.AddSassCompiler();
+#endif
+
         builder.Services.AddDefaultAWSOptions(provider =>
         {
             var options = builder.Configuration.GetAWSOptions();
