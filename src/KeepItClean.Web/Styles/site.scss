@@ -1,0 +1,34 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Eczar&display=swap');
+
+@font-face {
+    src: url('../fonts/earthis.otf');
+    font-family: 'Earthis';
+}
+
+// Bootstrap Overrides
+
+$primary: #59595b;
+$secondary: #6aa7c4;
+$success: #9fc54d;
+$info: #00aacd;
+$warning: #efc031;
+$danger: #d14f2a;
+$light: #f8f9fa;
+$dark: #333333;
+
+@import "../wwwroot/lib/bootstrap/scss/_functions.scss";
+@import "../wwwroot/lib/bootstrap/scss/_variables.scss";
+@import "../wwwroot/lib/bootstrap/scss/_variables-dark.scss";
+
+$font-family-base: 'Eczar';
+
+.lead, h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display-5, .display-6, .btn {
+    font-family: 'Earthis' !important;
+}
+
+@import "../wwwroot/lib/bootstrap/scss/bootstrap.scss";
+
+// App-specific styles
+main > .container {
+    padding-top: 60px;
+}
